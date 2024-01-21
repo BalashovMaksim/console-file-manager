@@ -1,5 +1,4 @@
 import java.io.File;
-import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class Main {
@@ -21,92 +20,102 @@ public class Main {
 
             System.out.println("Установлена директория" + " " + directoryPath.getName() + "\n" + "Для вызова списка команд введите 'commands'");
 
-            while (!input.equals(Commands.EXIT)) {
+            while (!input.equals(Commands.EXIT.getCommand())) {
                 String[] tokens = input.split(" ");
                 String command = tokens[0];
-                switch (command) {
-                    case Commands.CURRENT_DIRECTORY:
-                        fileManager.infoDirectory();
+                Commands cmd = null;
+
+                for (Commands c : Commands.values()) {
+                    if (c.getCommand().equals(command)) {
+                        cmd = c;
                         break;
-                    case Commands.LIST_OF_FILES:
-                        fileManager.listOfFiles(false);
-                        break;
-                    case Commands.LIST_OF_FILES_WITH_SIZE:
-                        fileManager.listOfFiles(true);
-                        break;
-                    case Commands.CHANGE_DIRECTORY:
-                        if (tokens.length > 1) {
-                            StringBuilder newDirectoryBuilder = new StringBuilder();
-                            for (int i = 1; i < tokens.length; i++) {
-                                newDirectoryBuilder.append(tokens[i]).append(" ");
+                    }
+                }
+                if (cmd != null){
+                    switch (cmd) {
+                        case CURRENT_DIRECTORY:
+                            fileManager.infoDirectory();
+                            break;
+                        case LIST_OF_FILES:
+                            fileManager.listOfFiles(false);
+                            break;
+                        case LIST_OF_FILES_WITH_SIZE:
+                            fileManager.listOfFiles(true);
+                            break;
+                        case CHANGE_DIRECTORY:
+                            if (tokens.length > 1) {
+                                StringBuilder newDirectoryBuilder = new StringBuilder();
+                                for (int i = 1; i < tokens.length; i++) {
+                                    newDirectoryBuilder.append(tokens[i]).append(" ");
+                                }
+                                String newDirectory = newDirectoryBuilder.toString().trim();
+                                fileManager.changeDirectory(newDirectory);
                             }
-                            String newDirectory = newDirectoryBuilder.toString().trim();
-                            fileManager.changeDirectory(newDirectory);
-                        }
-                        break;
-                    case Commands.MAKE_DIRECTORY:
-                        if (tokens.length>1){
-                            String newDirectoryName = tokens[1];
-                            fileManager.createDirectory(newDirectoryName);
-                        }
-                        break;
-                    case Commands.CREATE_FILE:
-                        if (tokens.length>1){
-                            String newFileName = tokens[1];
-                            fileManager.createFile(newFileName);
-                        }
-                        break;
-                    case Commands.COPY_FILES:
-                        if (tokens.length>2){
-                            String sourcePath = tokens[1];
-                            StringBuilder newDestinationPath = new StringBuilder();
-                            for (int i = 2; i < tokens.length; i++) {
-                                newDestinationPath.append(tokens[i]).append(" ");
+                            break;
+                        case MAKE_DIRECTORY:
+                            if (tokens.length>1){
+                                String newDirectoryName = tokens[1];
+                                fileManager.createDirectory(newDirectoryName);
                             }
-                            String destinationPath = newDestinationPath.toString().trim();
-                            fileManager.copyFilesAndDirectory(sourcePath,destinationPath);
-                        }
-                        break;
-                    case Commands.REMOVE:
-                        if (tokens.length>1){
-                            String fileName = tokens[1];
-                            fileManager.removeFiles(fileName);
-                        }
-                        break;
-                    case Commands.CREATE_EMPTY_ARCHIVE:
-                        if(tokens.length>1){
-                            String archiveName = tokens[1];
-                            fileManager.createEmptyZipArchive(archiveName);
-                        }
-                        break;
-                    case Commands.CREATE_ZIP_ARCHIVE:
-                        if (tokens.length<2) {
-                            System.out.println("Параметры команды не указаны");
-                        } else {
-                            String sourcePath = tokens[1];
-                            StringBuilder newArchiveBuilder = new StringBuilder();
-                            for (int i = 2; i < tokens.length; i++) {
-                                newArchiveBuilder.append(tokens[i]).append(" ");
+                            break;
+                        case CREATE_FILE:
+                            if (tokens.length>1){
+                                String newFileName = tokens[1];
+                                fileManager.createFile(newFileName);
                             }
-                            String archivePath = newArchiveBuilder.toString().trim();
-                            fileManager.createZipArchive(sourcePath, archivePath);
-                        }
-                        break;
-                    case Commands.READ_FILES:
-                        if (tokens.length>1){
-                            String filePath = tokens[1];
-                            fileManager.readFile(filePath);
-                        }
-                        break;
-                    case Commands.WRITE_IN_FILES:
-                        if(tokens.length>1){
-                            String filePath = tokens[1];
-                            fileManager.writeFile(filePath);
-                        }
-                        break;
-                    case Commands.SHOW_COMMANDS:
-                        fileManager.showCommands();
-                        break;
+                            break;
+                        case COPY_FILES:
+                            if (tokens.length>2){
+                                String sourcePath = tokens[1];
+                                StringBuilder newDestinationPath = new StringBuilder();
+                                for (int i = 2; i < tokens.length; i++) {
+                                    newDestinationPath.append(tokens[i]).append(" ");
+                                }
+                                String destinationPath = newDestinationPath.toString().trim();
+                                fileManager.copyFilesAndDirectory(sourcePath,destinationPath);
+                            }
+                            break;
+                        case REMOVE:
+                            if (tokens.length>1){
+                                String fileName = tokens[1];
+                                fileManager.removeFiles(fileName);
+                            }
+                            break;
+                        case CREATE_EMPTY_ARCHIVE:
+                            if(tokens.length>1){
+                                String archiveName = tokens[1];
+                                fileManager.createEmptyZipArchive(archiveName);
+                            }
+                            break;
+                        case CREATE_ZIP_ARCHIVE:
+                            if (tokens.length<2) {
+                                System.out.println("Параметры команды не указаны");
+                            } else {
+                                String sourcePath = tokens[1];
+                                StringBuilder newArchiveBuilder = new StringBuilder();
+                                for (int i = 2; i < tokens.length; i++) {
+                                    newArchiveBuilder.append(tokens[i]).append(" ");
+                                }
+                                String archivePath = newArchiveBuilder.toString().trim();
+                                fileManager.createZipArchive(sourcePath, archivePath);
+                            }
+                            break;
+                        case READ_FILES:
+                            if (tokens.length>1){
+                                String filePath = tokens[1];
+                                fileManager.readFile(filePath);
+                            }
+                            break;
+                        case WRITE_IN_FILES:
+                            if(tokens.length>1){
+                                String filePath = tokens[1];
+                                fileManager.writeFile(filePath);
+                            }
+                            break;
+                        case SHOW_COMMANDS:
+                            fileManager.showCommands();
+                            break;
+                    }
                 }
                 input = start.nextLine();
             }

@@ -1,17 +1,26 @@
-public interface Commands {
+public enum Commands {
+    LIST_OF_FILES("ls"),
+    LIST_OF_FILES_WITH_SIZE("ll"),
+    CHANGE_DIRECTORY("cd"),
+    MAKE_DIRECTORY("mkdir"),
+    CREATE_FILE("touch"),
+    COPY_FILES("cp"),
+    CURRENT_DIRECTORY("pwd"),
+    REMOVE("rm"),
+    CREATE_ZIP_ARCHIVE("zip"),
+    CREATE_EMPTY_ARCHIVE("czip"),
+    READ_FILES("read"),
+    WRITE_IN_FILES("write"),
+    SHOW_COMMANDS("commands"),
+    EXIT("exit");
 
-    String LIST_OF_FILES = "ls";
-    String LIST_OF_FILES_WITH_SIZE = "ll";
-    String CHANGE_DIRECTORY = "cd";
-    String MAKE_DIRECTORY = "mkdir";
-    String CREATE_FILE = "touch";
-    String COPY_FILES = "cp";
-    String CURRENT_DIRECTORY = "pwd";
-    String REMOVE = "rm";
-    String CREATE_ZIP_ARCHIVE = "zip";
-    String CREATE_EMPTY_ARCHIVE = "czip";
-    String READ_FILES = "read";
-    String WRITE_IN_FILES = "write";
-    String SHOW_COMMANDS = "commands";
-    String EXIT = "exit";
+    private final String command;
+
+    Commands(String command) {
+        this.command = command;
+    }
+
+    public String getCommand() {
+        return command;
+    }
 }
